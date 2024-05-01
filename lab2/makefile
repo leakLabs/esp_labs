@@ -1,4 +1,4 @@
-include config13.mk
+include config84.mk
 
 extract_port = $(shell echo $1 | awk '{print substr($$1, 1, 1)}')
 extract_pin = $(shell echo $1 | awk '{print substr($$1, 2)}')

@@ -65,9 +65,9 @@ int main(void) {
     setup();
     while(1) {
         if (!(PIN_SWITCH & (1 << SWITCH_PIN))) {
-            PORT_L1 = ((1 << LED1_PIN) & button1State | ~(1 << LED1_PIN) & PORT_L1);
-            PORT_L2 = ((1 << LED2_PIN) & button2State | ~(1 << LED2_PIN) & PORT_L2);
-            PORT_LEDOUT = ((1 << LEDOUT_PIN) & (button1State ^ button2State) | ~(1 << LEDOUT_PIN) & PORT_LEDOUT);
+            PORT_L1 = (((1 << LED1_PIN) & button1State) | (~(1 << LED1_PIN) & PORT_L1));
+            PORT_L2 = (((1 << LED2_PIN) & button2State) | (~(1 << LED2_PIN) & PORT_L2));
+            PORT_LEDOUT = (((1 << LEDOUT_PIN) & (button1State ^ button2State)) | (~(1 << LEDOUT_PIN) & PORT_LEDOUT));
         } else {
             //PORTB &= ~((1 << LED1_PIN) | (1 << LED2_PIN) | (1 << LED3_PIN));
             PORT_L1 &= ~(1 << LED1_PIN);
