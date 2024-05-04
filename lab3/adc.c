@@ -62,7 +62,8 @@ void init()
 void updateSEG()
 {
     PORTB &= ~(1 << segs[selSeg]);
-    PORTC &= ~(segNumbers[selSeg] << S3);
+    //PORTC &= ~(segNumbers[selSeg] << S3);
+    PORTC &= ~((1 << S0) | (1 << S1) | (1 << S2) | (1 << S3));
     // PORTC &= ~((1 << S0) | (1<<S2));
     selSeg = (selSeg + 1) % 4;
     PORTC |= (segNumbers[selSeg] << S3);
@@ -85,12 +86,11 @@ void processVoltage()
         voltage = adc_c5 - adc_c4;
 
     float tmp = (float)voltage / 204.8;
-    voltage = tmp * 100.0 * RPMTOV;
-    voltage = voltage;
+    int rpm = tmp * 100.0 * RPMTOV;
     for (short i = 3; i >= 0; i--)
     {
-        segNumbers[i] = voltage % 10;
-        voltage /= 10;
+        segNumbers[i] = rpm % 10;
+        rpm /= 10;
     }
 }
 
@@ -102,13 +102,13 @@ ISR(ADC_vect)
     if (channel == 0)
     {
         adc_c4 = adc_value;
-        adcStart(5);
+        adcStart(IN2);
     }
     else
     {
         adc_c5 = adc_value;
         processVoltage();
-        adcStart(4);
+        adcStart(IN1);
         // PORTB |= (1 << PB5);
     }
 
